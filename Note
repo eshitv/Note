@@ -1,0 +1,182 @@
+/// we create three js files navbarjs textutilsjs and alertjs and appjs is already created we use it return all these files. 
+
+navbar.js
+import React from 'react';
+
+
+export default function Navbar(props){
+    return(
+        <nav className={`navbar navbar-expand-lg ${props.mode}-dark bg-${props.mode}`}>
+        <div className={`container-fluid  ${props.mode}-white bg-${props.mode}`}>
+          <a className="navbar-brand" href="/">{props.textutils}</a>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/">{props.link}</a>
+              </li>
+            </ul>
+           {/* <form className="d-flex">
+              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+              <button className="btn btn-outline-success" type="submit">Search</button>
+    </form>*/}
+            <div className={`form-check form-switch text-${props.mode==='light'?'dark':'light' }`}>
+  <input className="form-check-input" type="checkbox" onClick = {props.toggleMode} role="switch" id="flexSwitchCheckDefault"/>
+  <label className="form-check-label " htmlFor="flexSwitchCheckDefault">Enable Dark Mode</label>
+</div>
+          </div>
+        </div> 
+      </nav>
+    )
+
+};
+
+
+//To Use the protype we can also use another way of writing 
+
+ // --> Navbar.propTypes = {
+ //    title : PropTypes.string or                title : "whatever title name you want to give"
+ //    about: PropTypes.string or                about : "Whatever name you want to give"
+ //}
+
+ // > Navbar.propTypes = {
+ //    title : PropTypes.string.isrequired 
+ //    about: PropTypes.string.isrequired 
+//
+//
+
+/// In Textutils
+import React, { useState } from 'react'
+
+
+export default function TextForm(props){
+
+
+  let HandleUpClick = () => {
+    console.log("UpperCase" + text);
+    let newText = text.toUpperCase();
+    setText(newText);
+    props.showAlert("done!")
+  }
+
+  let HandleLowClick = () => {
+    console.log("LowerCase" + text);
+    let newText = text.toLowerCase();
+    setText(newText);
+    props.showAlert("done!")
+    setInterval(() => {
+      document.title = 'lowercase done'
+
+    }, 1000);
+
+
+  }
+
+  let HandleClear = (event) => {
+    console.log("Change");
+    let newText = '';
+    setText(newText);
+    props.showAlert("done!")
+    setInterval(() => {
+      document.title = 'Cleared'
+
+    }, 1000);
+
+
+    }
+    let HandleCopy = () => {
+      console.log("Copy" + text);
+      let ext = document.getElementById('myBox');
+      ext.select();
+      navigator.clipboard.writeText(ext.value)
+
+      setInterval(() => {
+        document.title = 'Copy Done'
+
+      }, 1000);
+  
+      }
+  
+
+     
+  let HandleOnChange = (event) => {
+    console.log("Change");
+    setText(event.target.value);
+    }
+
+   
+
+  const [text, setText] = useState("");
+  //text = "New Text"; // Wrong way to change the text
+  //setText("New Text"); // Correct Way to Change the Text
+
+ 
+  return (
+    <>
+    <div className="container">
+            <h1>{props.heading}</h1>
+    <div className="mb-3">
+  <textarea className="form-control" value= {text} onChange = {HandleOnChange} style = {{backgroundColor: props.mode==='dark'?'grey':'white' }}  id="myBox" rows="3"></textarea>
+  </div>
+  <button disabled={text.length === 0} className = "btn btn-primary mx-1 my-1" onClick = {HandleUpClick}>Convert to UpperCase</button>
+  <button disabled={text.length === 0} className = "btn btn-primary mx-1 my-1" onClick = {HandleLowClick}>Convert to LowerCase</button>
+  <button disabled={text.length === 0} className = "btn btn-primary mx-1 my-1" onClick = {HandleClear}>Clear Text</button>
+  <button disabled={text.length === 0} className = "btn btn-primary mx-1 my-1" onClick = {HandleCopy}>Copy Text</button>
+
+</div>
+<div className="container">
+<h1>Summary</h1>
+<p>{text.split(" ").filter((element)=>{return element.length!==0}).length} words and Charactrers:{text.length}</p>
+<p><b>{0.008 * text.split(" ").length } minutes</b></p>
+<h1>Preview</h1>
+<p>{text}</p>
+</div>
+<footer>
+  Author: Eshitva 
+  <p>E-Mail:<a href="eshitva@gmail.com">eshitva@gmail.com</a></p>
+</footer>
+</>
+  )
+}
+
+///In Alert js 
+import React from 'react';
+
+function alert(props){
+  return (
+    <div style ={{height: '50px'}}>
+    {props.alert && <div className="alert alert-warning alert-dismissible fade show" role="alert">
+<strong>{props.alert.type}</strong>{props.alert.msg}
+  <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>}
+</div>
+
+  )}
+
+   export default alert
+
+//In Appjs
+import './App.css';
+import Navbar from './components/Navbar';
+import TextForm from './components/TextForm';
+import Alert from './components/Alert';
+import React, { useState } from 'react';
+
+return (
+  <>
+
+<Navbar textutils = "TEXTUTILS" link = "About" mode ={mode} toggleMode = {toggleMode} />
+<Alert alert={alert}/>
+<div className = "container">
+<TextForm showAlert={showAlert} heading = "Enter the text"/>
+
+  </>
+  );
+}
+
+export default App;
